@@ -1,0 +1,204 @@
+// start project named myproject
+django-admin startproject myproject 
+
+// create app named todo
+python manage.py startapp todo
+
+// add todo to INSTALLED_APPS in myproject/settings.py
+
+// migrate models 
+python manage.py migrate
+
+// make super user
+python mange.py createsuperuser
+
+// create templates with index.html inside
+create templates 
+create todo
+create index.html
+	todo/templates/todo/index.html
+
+// create static with all css 
+create static 
+create todo
+create style.css and bootstrap files
+	todo/static/todo/style.css
+	todo/static/todo/bs
+
+// return request in views.py
+def index(request):
+    context = {}
+    return render(request, 'todo/index.html', context)
+
+// set up urls
+add from django.urls import path, include
+path('', include('todo.urls'))
+
+// create urls.py under todo
+from django.urls import path
+
+from . import views
+
+urlpatterns = [
+    path('',views.index, name='index')
+]
+
+
+// add models 
+class Todo(models.Model):
+    text = models.CharField(max_length=40)
+    complete = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.text
+
+// allow the admin page to add a Todo
+from django.contrib import admin
+
+from .models import Todo
+# Register your models here.
+
+admin.site.register(Todo)
+
+// run migrations
+python manage.py makemigrations
+python manage.py migrate
+
+// allow todos to be accessed - add in views.py
+from django.shortcuts import render
+from .models import Todo
+# Create your views here.
+
+def index(request):
+    todo_list = Todo.objects.order_by('id')
+    context = {'todo_list' : todo_list}
+    return render(request, 'todo/index.html', context)
+
+// see todos in index.html
+<html>
+    <body>
+        <h1>todos</h1>
+        <ul>
+            {% for todo in todo_list %}
+            <li>{{ todo.text }}</li>
+            {% endfor %}
+        </ul>
+    </body>
+</html>
+
+
+// add form
+//create forms.py 
+from django import forms
+
+class TodoForm(forms.Form):
+    text = forms.CharField(max_length=40)
+
+// modify views.py
+from django.shortcuts import render
+from .models import Todo
+from .forms import TodoForm
+# Create your views here.
+
+def index(request):
+    todo_list = Todo.objects.order_by('id')
+    form = TodoForm()
+    context = {'todo_list' : todo_list, 'form' : form}
+    return render(request, 'todo/index.html', context)
+
+// modify index.html
+<html>
+    <body>
+        <h1>todos</h1>
+
+        <form action="#" method="POST" role="form">
+            {% csrf_token %}
+            {{ form.text }}
+            <button type="submit">ADD</button>
+        </form>
+
+        <ul>
+            {% for todo in todo_list %}
+                {% if todo.complete %}
+                    <li>{{ todo.text }}</li>
+                {% else %}
+                <li><strong>{{ todo.text }}</strong></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </body>
+</html>
+
+
+// submit form and get data 
+// modify views.py 
+from django.shortcuts import render, redirect
+from django.views.decorators.http import require_POST
+
+from .models import Todo
+from .forms import TodoForm
+# Create your views here.
+
+def index(request):
+    todo_list = Todo.objects.order_by('id')
+    form = TodoForm()
+    context = {'todo_list' : todo_list, 'form' : form}
+    return render(request, 'todo/index.html', context)
+
+@require_POST
+def addTodo(request):
+    form = TodoForm(request.POST)
+    print(request.POST['text'])
+
+    return redirect('index')
+
+// modify urls.py 
+from django.urls import path
+
+from . import views
+
+urlpatterns = [
+    path('',views.index, name='index'),
+    path('add', views.addTodo, name='add')
+]
+
+// modify index.html
+<html>
+    <body>
+        <h1>todos</h1>
+
+        <form action="{% url 'add' %}" method="POST" role="form">
+            {% csrf_token %}
+            {{ form.text }}
+            <button type="submit">ADD</button>
+        </form>
+
+        <ul>
+            {% for todo in todo_list %}
+                {% if todo.complete %}
+                    <li>{{ todo.text }}</li>
+                {% else %}
+                <li><strong>{{ todo.text }}</strong></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </body>
+</html>
+
+
+
+
+// save to database 
+// modify views.py
+@require_POST
+def addTodo(request):
+    form = TodoForm(request.POST)
+    print(request.POST['text'])
+    if (form.is_valid()):
+        new_todo = Todo(text=request.POST['text'])
+        new_todo.save()
+
+    return redirect('index')
+
+
+
