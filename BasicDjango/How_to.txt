@@ -1,0 +1,17 @@
+docker-compose run web django-admin startproject testing .
+
+#edit Dockerfile
+#put the project name in this line
+ENV DJANGO_SETTINGS_MODULE=testing.settings
+
+docker-compose run web python3 manage.py migrate
+docker-compose run web python3 manage.py makemigrations
+docker-compose up
+
+http://localhost:8000/
+
+
+
+
+docker start django djangodb
+docker exec -it django /bin/bash

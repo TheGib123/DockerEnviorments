@@ -1,0 +1,23 @@
+# build containers
+docker-compose build
+
+# starts and runs containers
+docker-compose up
+
+# runs in background
+docker-compose up -d
+
+--------------------------------------------------------
+
+# access database container
+docker-compose exec -it db /bin/bash
+
+# log in to mysql database
+mysql -u root -p
+
+
+--------------------------------------------------------
+
+# access php and apache container
+docker-compose exec -it php-apache /bin/bash
+docker-compose exec -it webserver /bin/bash

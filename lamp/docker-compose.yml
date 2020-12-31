@@ -1,0 +1,33 @@
+version: '3'
+services:
+    php-apache:
+        networks:
+            net:
+        build: .
+        container_name: webserver
+        ports:
+            - 80:80
+        volumes:
+            - ./src:/var/www/html
+        links:
+          - 'db'
+    db:
+        networks:
+            net:
+        image: "mysql"
+        container_name: db
+        volumes:
+            - db-data:/database
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: password
+            MYSQL_DATABASE: mydb
+            MYSQL_USER: myuser
+            MYSQL_PASSWORD: password
+
+volumes:
+  db-data:
+
+networks:
+  net:
+    driver: bridge
