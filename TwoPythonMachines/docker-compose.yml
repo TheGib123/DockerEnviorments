@@ -1,0 +1,23 @@
+version: '3'
+services:
+  one:
+    container_name: con_one
+    build: .
+    command: tail -f /dev/null
+    networks:
+      net:
+    volumes:
+      - ./one:/home
+
+  two:
+    container_name: con_two
+    build: .
+    command: tail -f /dev/null
+    networks:
+      net:
+    volumes:
+      - ./two:/home
+
+networks:
+  net:
+    driver: bridge
