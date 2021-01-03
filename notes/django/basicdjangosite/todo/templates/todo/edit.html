@@ -1,0 +1,12 @@
+<h1>Edit page</h1>
+<h3>ID {{ todo.id }}</h3>
+<form action="{% url 'saveedit' %}" method="POST" role="form">
+    {% csrf_token %}
+    <input type="hidden" name="todoID" value="{{ todo.id }}">
+    <input type="text" name="mytext" value="{{ todo }}"><br>
+    <button type="submit">SAVE</button>
+</form>
+<h3>ID {{ todo.id }}</h3>
+
+<h3>Completed {{ todo.complete }}</h3>
+

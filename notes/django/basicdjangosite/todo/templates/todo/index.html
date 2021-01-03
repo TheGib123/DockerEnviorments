@@ -1,0 +1,42 @@
+<html>
+    <body>
+        <h1>todos</h1>
+
+        <form action="{% url 'add' %}" method="POST" role="form">
+            {% csrf_token %}
+            {{ form.mytext }}
+            <button type="submit">ADD</button>
+        </form>
+
+        <table>
+            <tr>
+                <th>id</th>
+                <th>todo</th>
+                <th>checked</th>
+                <th>edit</th>
+                <th>delete</th>
+            </tr>
+            {% for todo in todo_list %}
+                <tr>  
+                    <td><strong>{{ todo.id }}</strong></td>
+                    <td><strong>{{ todo.text }}</strong></td>  
+                    <td>
+                        {% if todo.complete %}                            
+                            <input type="checkbox" name="check" onchange="window.location.href='uncheck/{{ todo.id }}'" checked>    
+                        {% else %}
+                            <input type="checkbox" name="check" onchange="window.location.href='check/{{ todo.id }}'">
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="edit/{{ todo.id }}">edit</a>
+                    </td>
+                    <td>
+                        <a href="delete/{{ todo.id }}">delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        
+    </body>
+</html>
