@@ -30,9 +30,18 @@ def index(request):
     context = {}
     return render(request, 'todo/index.html', context)
 
-// set up urls
+// set up urls under todo
 add from django.urls import path, include
 path('', include('todo.urls'))
+
+// set up project urls
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('', include('todo.urls')),
+    path('admin/', admin.site.urls),
+]
 
 // create urls.py under todo
 from django.urls import path
