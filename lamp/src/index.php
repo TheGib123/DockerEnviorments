@@ -4,6 +4,7 @@
 
 <?php
 include("functions.php");
+include("build.php");
 
 
 function AddCust(){
