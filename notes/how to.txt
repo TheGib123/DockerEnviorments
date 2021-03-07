@@ -1,0 +1,5 @@
+python.exe -m venv myenv
+cd .\env\
+cd .\Scripts\
+.\activate
+python -m pip install kivy
