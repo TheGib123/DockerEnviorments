@@ -1,5 +1,13 @@
+### virtual enviorment
 python.exe -m venv myenv
 cd .\env\
 cd .\Scripts\
 .\activate
 python -m pip install kivy
+
+
+
+### create exe
+pip install pyinstaller
+### use -m if it does not need the console
+pyinstaller --onefile -m main.py
